@@ -1,8 +1,5 @@
 language: bash
-env: >-
-   SHASUM="shasum -a 256"
-   BIN="OSX"
-   TEST_RUNNER_EXTRA="--timeout-factor=10 wallet_disable"  # Only run wallet_disable as a smoke test, see https://github.com/bitcoin/bitcoin/pull/17240#issuecomment-546022121 why the other tests are disabled
+
 install:
     - HOMEBREW_NO_AUTO_UPDATE=1 brew install python3 coreutils
     - pip3 install pyzmq
@@ -30,7 +27,14 @@ after_script:
 
 jobs:
  include:
- - os: osx
+# - os: osx
+ - os: linux
+   dist: bionic
+   arch: amd64
+   env: >-
+    SHASUM=sha256sum
+    BIN=AMD64
+    TEST_RUNNER_EXTRA="--timeout-factor=10"
  - os: linux
    dist: bionic
    arch: arm64
@@ -38,7 +42,14 @@ jobs:
     SHASUM=sha256sum
     BIN=ARM64
     TEST_RUNNER_EXTRA="--timeout-factor=10"
-   install:
+ - os: linux
+   dist: bionic
+   arch: arm64-graviton2
+   env: >-
+    SHASUM=sha256sum
+    BIN=ARM64
+    TEST_RUNNER_EXTRA="--timeout-factor=10"
+ install:
     - sudo apt update && sudo apt install python3-zmq -y
 
  - os: windows
