@@ -1,29 +1,5 @@
 language: bash
 
-install:
-    - HOMEBREW_NO_AUTO_UPDATE=1 brew install python3 coreutils
-    - pip3 install pyzmq
-before_script:
-    - git clone https://github.com/bitcoin/bitcoin.git ./bitcoin-core-nightly
-    - cd bitcoin-core-nightly
-    - export SRCDIR=$(pwd)
-    - echo $SRCDIR
-    - python3 ../download_latest_nightly.py --bin="${BIN}" --srcdir="${SRCDIR}"
-    - export VERSION=$(tail -1 ./version.txt)
-    - export BUILDDIR=$(tail -1 ./build_dir.txt)
-    - echo $VERSION
-    - echo $BUILDDIR
-script:
-    - ${BUILDDIR}/src/test_bitcoin
-    - cd ${SRCDIR}
-    - git checkout $VERSION
-    - ${SRCDIR}/test/util/bitcoin-util-test.py -v
-    - ${SRCDIR}/test/functional/test_runner.py ${TEST_RUNNER_EXTRA}
-after_script:
-    - cd ${SRCDIR}
-    - git log -1
-    - cd ${BUILDDIR}
-    - $SHASUM ./src/*
 
 jobs:
  include:
